@@ -50,6 +50,42 @@ public class CourseDAO {
 
 		return courses;
 	}
+	
+	public List<Course> findCourseByFieldValue(List<String> fields, List<Object> values){
+		
+		PreparedStatement statement;
+		try {
+
+			String statement_string = "SELECT * FROM asgn1.courses WHERE ";
+
+			int i = 0;
+			for (i = 0; i < fields.size() - 1; i++) {
+
+				statement_string += fields.get(0) + "=? and ";
+
+			}
+
+			statement_string += fields.get(i) + "=?";
+
+			statement = getConnection().prepareStatement(statement_string);
+
+			i = 1;
+
+			for (Object o : values) {
+
+				statement.setObject(i++, o);
+			}
+
+			ResultSet rs = statement.executeQuery();
+
+			return this.createCoursesFromResultSet(rs);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
 
 	public List<Course> findCourseByFieldValue(String field, Object value) {
 

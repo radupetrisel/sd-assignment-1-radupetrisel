@@ -90,6 +90,42 @@ public class TeacherDAO {
 		return null;
 	}
 
+	public List<Teacher> findTeacherByFieldValue(List<String> fields, List<Object> values) {
+
+		PreparedStatement statement;
+		try {
+
+			String statement_string = "SELECT * FROM asgn1.teachers WHERE ";
+
+			int i = 0;
+			for (i = 0; i < fields.size() - 1; i++) {
+
+				statement_string += fields.get(0) + "=? and ";
+
+			}
+
+			statement_string += fields.get(i) + "=?";
+
+			statement = getConnection().prepareStatement(statement_string);
+
+			i = 1;
+
+			for (Object o : values) {
+
+				statement.setObject(i++, o);
+			}
+
+			ResultSet rs = statement.executeQuery();
+
+			return this.createTeachersFromResultSet(rs);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
 	public void updateTeacherByFieldValue(int teacherId, String field, Object value) {
 
 		PreparedStatement statement;

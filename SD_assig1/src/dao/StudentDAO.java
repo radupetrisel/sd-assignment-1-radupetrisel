@@ -10,7 +10,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 public class StudentDAO {
 
@@ -86,12 +85,51 @@ public class StudentDAO {
 	public List<Student> findStudentByFieldValue(String field, Object value) {
 
 		PreparedStatement statement;
-		try {
 
+		try {
 			statement = getConnection().prepareStatement("SELECT * FROM asgn1.students WHERE " + field + "=?");
+
 			statement.setObject(1, value);
 
 			ResultSet rs = statement.executeQuery();
+			return this.createStudentsFromResultSet(rs);
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+
+		return null;
+
+	}
+
+	public List<Student> findStudentByFieldValue(List<String> fields, List<Object> values) {
+
+		PreparedStatement statement;
+		try {
+
+			String statement_string = "SELECT * FROM asgn1.students WHERE ";
+
+			int i = 0;
+			for (i = 0; i < fields.size() - 1; i++) {
+
+				statement_string += fields.get(0) + "=? and ";
+
+			}
+
+			statement_string += fields.get(i) + "=?";
+
+			statement = getConnection().prepareStatement(statement_string);
+
+			i = 1;
+
+			for (Object o : values) {
+
+				statement.setObject(i++, o);
+			}
+
+			ResultSet rs = statement.executeQuery();
+
 			return this.createStudentsFromResultSet(rs);
 
 		} catch (SQLException e) {
@@ -121,16 +159,14 @@ public class StudentDAO {
 
 		PreparedStatement statement;
 		try {
-			
-			statement = getConnection()
-					.prepareStatement("DELETE FROM asgn1.students WHERE " + field + "=?;");
+
+			statement = getConnection().prepareStatement("DELETE FROM asgn1.students WHERE " + field + "=?;");
 			statement.setObject(1, value);
 			statement.executeUpdate();
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
 
 	}
 

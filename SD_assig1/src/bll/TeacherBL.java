@@ -1,5 +1,9 @@
 package bll;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import dao.Enrol;
 import dao.EnrolDAO;
 import dao.Student;
 import dao.StudentDAO;
@@ -16,7 +20,7 @@ public class TeacherBL {
 
 			t = (new TeacherDAO()).findTeacherByFieldValue("email", email).get(0);
 
-		} catch (ArrayIndexOutOfBoundsException ie) {
+		} catch (IndexOutOfBoundsException ie) {
 
 			return null;
 		}
@@ -25,23 +29,21 @@ public class TeacherBL {
 
 	}
 
-	public Teacher login(String email, String password) {
+	public int login(String email, String password) {
 
 		Teacher t = findTeacherByEmail(email);
 
 		if (t == null) {
 
-			System.out.println("Invalid email.");
-			return null;
+			return -1;
 		}
 
-		if (!t.getEmail().equals(password)) {
+		if (!t.getPassword().equals(password)) {
 
-			System.out.println("Incorrect password.");
-			return null;
+			return -2;
 		}
 
-		return t;
+		return t.getId();
 
 	}
 
@@ -77,7 +79,24 @@ public class TeacherBL {
 	
 	public void giveMarkToStudent (int courseID, int studentID, int grade) {
 		
+		List<String> fields = new ArrayList<String>();
+		fields.add("studentId");
+		fields.add("courseId");
 		
+		List<Object> values = new ArrayList<Object>();
+		values.add(studentID);
+		values.add(courseID);
+		
+		EnrolDAO ed = new EnrolDAO();
+		
+		Enrol e = ed.findEnrolByFieldValue(fields, values).get(0);
+		
+		ed.updateEnrol(e.getId(), "grade", grade);
+	}
+	
+	public void removeStudent(int studentID) {
+		
+		(new StudentDAO()).deleteStudentByFieldValue("idstudents", studentID);
 		
 	}
 	

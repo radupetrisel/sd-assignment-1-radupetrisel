@@ -98,13 +98,13 @@ public class DBDriver {
 					.prepareStatement("ALTER TABLE `asgn1`.`courses` " + "ADD UNIQUE INDEX `name_UNIQUE` (`name` ASC);")
 					.executeUpdate();
 			
-			getConnection().prepareStatement("ALTER TABLE `asgn1`.`students` \r\n" + 
-					"ADD UNIQUE INDEX `email_UNIQUE` (`email` ASC);\r\n" + 
-					");").executeUpdate();
+			getConnection().prepareStatement("ALTER TABLE `asgn1`.`students`" + 
+					"ADD UNIQUE INDEX `email_UNIQUE` (`email` ASC);"
+					).executeUpdate();
 			
-			getConnection().prepareStatement("ALTER TABLE `asgn1`.`teachers` \r\n" + 
-					"ADD UNIQUE INDEX `email_UNIQUE` (`email` ASC);\r\n" + 
-					");").executeUpdate();
+			getConnection().prepareStatement("ALTER TABLE `asgn1`.`teachers`" + 
+					"ADD UNIQUE INDEX `email_UNIQUE` (`email` ASC);"
+					).executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();

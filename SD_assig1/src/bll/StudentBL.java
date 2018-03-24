@@ -20,27 +20,25 @@ public class StudentBL {
 
 		} catch (IndexOutOfBoundsException ie) {
 
-			System.out.println("Cannot find student with email " + email);
+			return null;
 		}
 
 		return s;
 	}
 
-	public Student login(String email, String password) {
+	public int login(String email, String password) {
 
 		Student s = findStudentByEmail(email);
 
 		if (s == null) {
-			System.out.println("invalid email");
-			return null;
+			return -1;
 		}
 
 		if (!s.getPassword().equals(password)) {
-			System.out.println("invalid password");
-			return null;
+			return -2;
 		}
 
-		return s;
+		return s.getId();
 	}
 
 	public void updateEmail(int studentID, String newEmail) {
@@ -66,14 +64,8 @@ public class StudentBL {
 	}
 
 	public Map<String, Integer> viewGrades(int studentID) {
-		
-		List<String> fields = new ArrayList<String>();
-		fields.add("studentId");
-		
-		List<Object> values = new ArrayList<Object>();
-		values.add(studentID);
-		
-		return (new EnrolDAO()).findEnrolByFieldsValues(fields, values).stream()
+				
+		return (new EnrolDAO()).findEnrolByFieldValue("studentId", studentID).stream()
 				.collect(Collectors.toMap(e -> e.getCourse().getName(), e -> e.getGrade()));
 
 	}

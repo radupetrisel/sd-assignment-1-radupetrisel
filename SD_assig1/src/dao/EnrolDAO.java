@@ -32,7 +32,7 @@ public class EnrolDAO {
 
 		PreparedStatement statement;
 		try {
-			
+
 			statement = getConnection()
 					.prepareStatement("INSERT INTO asgn1.enrols (studentId, courseId, grade) VALUES(?, ?, ?);");
 			statement.setInt(1, studentId);
@@ -40,41 +40,22 @@ public class EnrolDAO {
 			statement.setInt(3, grade);
 
 			statement.executeUpdate();
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	
 
 	}
-
-	public List<Enrol> findEnrolByFieldsValues(List<String> fields, List<Object> values) {
-
-		PreparedStatement statement;
+	
+	public List<Enrol> findEnrolByFieldValue(String field, Object value){
+		
 		try {
 			
-			String statement_string = "SELECT * FROM asgn1.enrols WHERE ";
+			PreparedStatement statement = getConnection().prepareStatement("SELECT * FROM asgn1.enrols WHERE " + field + "=?");
+			statement.setObject(1, value);
+			ResultSet rs = statement.executeQuery();
 			
-			int i = 0;
-			for (i = 0; i < fields.size() - 1; i++) {
-				
-				statement_string += fields.get(0) + "=? and ";
-				
-			}
-			
-			statement_string += fields.get(i) + "=?";
-			
-			statement = getConnection().prepareStatement(statement_string);
-			
-			i = 1;
-			
-			for (Object o: values) {
-				
-				statement.setObject(i++, o);
-			}
-			
-
-			return this.createEnrolsFromResultSet(statement.executeQuery());
+			return this.createEnrolsFromResultSet(rs);
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -82,22 +63,56 @@ public class EnrolDAO {
 		
 		return null;
 	}
+	
+
+	public List<Enrol> findEnrolByFieldValue(List<String> fields, List<Object> values) {
+
+		PreparedStatement statement;
+		try {
+
+			String statement_string = "SELECT * FROM asgn1.enrols WHERE ";
+
+			int i = 0;
+			for (i = 0; i < fields.size() - 1; i++) {
+
+				statement_string += fields.get(0) + "=? and ";
+
+			}
+
+			statement_string += fields.get(i) + "=?";
+
+			statement = getConnection().prepareStatement(statement_string);
+
+			i = 1;
+
+			for (Object o : values) {
+
+				statement.setObject(i++, o);
+			}
+
+			return this.createEnrolsFromResultSet(statement.executeQuery());
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
 
 	public void updateEnrol(int enrolId, String field, Object value) {
 
 		PreparedStatement statement;
 		try {
-			
+
 			statement = getConnection()
 					.prepareStatement("UPDATE asgn1.enrols SET " + field + "=? WHERE asgn1.enrols.idenrols=?;");
 			statement.setObject(1, value);
 			statement.setInt(2, enrolId);
 			statement.executeUpdate();
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 
 	}
 
@@ -105,9 +120,8 @@ public class EnrolDAO {
 
 		PreparedStatement statement;
 		try {
-			
-			statement = getConnection()
-					.prepareStatement("DELETE FROM asgn1.enrols WHERE " + field + "=?;");
+
+			statement = getConnection().prepareStatement("DELETE FROM asgn1.enrols WHERE " + field + "=?;");
 			statement.setObject(1, value);
 			statement.executeUpdate();
 
