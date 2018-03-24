@@ -30,71 +30,91 @@ public class EnrolDAO {
 
 	public void createEnrol(int studentId, int courseId, Integer grade) {
 
+		PreparedStatement statement;
 		try {
-
-			PreparedStatement statement = getConnection()
+			
+			statement = getConnection()
 					.prepareStatement("INSERT INTO asgn1.enrols (studentId, courseId, grade) VALUES(?, ?, ?);");
 			statement.setInt(1, studentId);
 			statement.setInt(2, courseId);
 			statement.setInt(3, grade);
 
 			statement.executeUpdate();
-
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	
+
 	}
 
-	public List<Enrol> findEnrolByFieldValue(String field, Object value) {
+	public List<Enrol> findEnrolByFieldsValues(List<String> fields, List<Object> values) {
 
+		PreparedStatement statement;
 		try {
-
-			PreparedStatement statement = getConnection()
-					.prepareStatement("SELECT * FROM asgn1.enrols WHERE " + field + "=?");
-			statement.setObject(1, value);
+			
+			String statement_string = "SELECT * FROM asgn1.enrols WHERE ";
+			
+			int i = 0;
+			for (i = 0; i < fields.size() - 1; i++) {
+				
+				statement_string += fields.get(0) + "=? and ";
+				
+			}
+			
+			statement_string += fields.get(i) + "=?";
+			
+			statement = getConnection().prepareStatement(statement_string);
+			
+			i = 1;
+			
+			for (Object o: values) {
+				
+				statement.setObject(i++, o);
+			}
+			
 
 			return this.createEnrolsFromResultSet(statement.executeQuery());
-
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+		
 		return null;
 	}
 
-	public void updateEnrol(Enrol e) {
+	public void updateEnrol(int enrolId, String field, Object value) {
 
+		PreparedStatement statement;
 		try {
-
-			PreparedStatement statement = getConnection().prepareStatement("UPDATE asgn1.enrols SET " + "studentId=?, "
-					+ "courseId=?, " + "grade=? " + "WHERE asgn1.enrols.idenrols=?;");
-
-			statement.setInt(1, e.getStudent().getId());
-			statement.setInt(2, e.getCourse().getId());
-			statement.setInt(3, e.getGrade());
-			statement.setInt(4, e.getId());
-
+			
+			statement = getConnection()
+					.prepareStatement("UPDATE asgn1.enrols SET " + field + "=? WHERE asgn1.enrols.idenrols=?;");
+			statement.setObject(1, value);
+			statement.setInt(2, enrolId);
 			statement.executeUpdate();
-
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
+
 
 	}
 
 	public void deleteEnrolsByFieldValue(String field, Object value) {
-		
+
+		PreparedStatement statement;
 		try {
 			
-			PreparedStatement statement = getConnection().prepareStatement("DELETE FROM asgn1.enrols WHERE " + field + "=?;");
+			statement = getConnection()
+					.prepareStatement("DELETE FROM asgn1.enrols WHERE " + field + "=?;");
 			statement.setObject(1, value);
 			statement.executeUpdate();
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		
+
 	}
 
 }

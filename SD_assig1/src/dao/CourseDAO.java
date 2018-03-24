@@ -22,7 +22,6 @@ public class CourseDAO {
 					.prepareStatement(
 							"SELECT * FROM asgn1.teachers " + "WHERE asgn1.teachers.idteachers = " + teacherId)
 					.executeQuery() != null : "Invalid teacher";
-
 			PreparedStatement statement = getConnection()
 					.prepareStatement("INSERT INTO asgn1.courses (name, teacherId)" + "VALUES(?, ?);");
 
@@ -30,9 +29,7 @@ public class CourseDAO {
 			statement.setInt(2, teacherId);
 
 			statement.executeUpdate();
-
 		} catch (SQLException e) {
-
 			e.printStackTrace();
 		}
 
@@ -56,58 +53,54 @@ public class CourseDAO {
 
 	public List<Course> findCourseByFieldValue(String field, Object value) {
 
+		PreparedStatement statement;
 		try {
-
-			PreparedStatement statement = getConnection()
-					.prepareStatement("SELECT * FROM asgn1.courses WHERE " + field + "=?");
+			statement = getConnection().prepareStatement("SELECT * FROM asgn1.courses WHERE " + field + "=?");
 			statement.setObject(1, value);
 			ResultSet rs = statement.executeQuery();
 
 			return this.createCoursesFromResultSet(rs);
 
 		} catch (SQLException e) {
+
 			e.printStackTrace();
 		}
 
 		return null;
+	}
+
+	public void deleteCourseByFieldValue(String field, Object value) {
+
+		PreparedStatement statement;
+
+		try {
+			
+			statement = getConnection().prepareStatement("DELETE FROM asgn1.courses WHERE " + field + "=?;");
+			statement.setObject(1, value);
+			statement.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
 	}
-	
-	
-	public void updateCourse(Course c){
-		
+
+	public void updateCourseByFieldValue(int courseId, String field, Object value) {
+
 		PreparedStatement statement;
 		try {
-			statement = getConnection().prepareStatement("UPDATE asgn1.courses SET "
-					+ "name=?, "
-					+ "teacherId=? "
-					+ "WHERE asgn1.courses.idcourses =?;");
 			
-			statement.setString(1, c.getName());
-			statement.setInt(2, c.getTeacher().getId());
-			
+			statement = getConnection()
+					.prepareStatement("UPDATE asgn1.courses SET " + field + "=? WHERE asgn1.courses.idcourses=?;");
+			statement.setObject(1, value);
+			statement.setInt(2, courseId);
 			statement.executeUpdate();
 			
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	
-	}
-	
-	public void deleteCourseByFieldValue(String field, Object value){
-		
-		try {
-			
-			PreparedStatement statement = getConnection().prepareStatement("DELETE FROM asgn1.courses WHERE " + field + "=?;");
-			statement.setObject(1, value);
-			
-			statement.executeUpdate();			
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		
+
 	}
 
 }

@@ -27,24 +27,28 @@ public class DBDriver {
 	public static void populateDatabase() {
 
 		StudentDAO sd = new StudentDAO();
+		TeacherDAO td = new TeacherDAO();
+		CourseDAO cd = new CourseDAO();
+		EnrolDAO ed = new EnrolDAO();
+
 		sd.createStudent("Radu", "Petrisel", "Azuga 3", "0747673818", "radupetrisel@gmail.com", "1960920125844",
 				"20/09/1996", "asdf");
 		sd.createStudent("Diana", "Danila", "Izlazului 2", "0752030023", "lucia_diana1995@yahoo.com", "2951221125635",
-				"21/12/1995", "1234");
+				"21/12/1995", "ddiana");
 		sd.createStudent("Peter", "Zavaczki", "Intrelacuri 3", "0742737506", "bloopeti@gmail.com", "1970131134856",
-				"31/01/1997", "parola");
+				"31/01/1997", "zpeter");
 
-		TeacherDAO td = new TeacherDAO();
 		td.createTeacher("Tudor", "Vlad", "0712345678", "1012345678911", "teacher_address_1", "tudor.vlad@cs.utcluj.ro",
-				"parola123");
+				"tvlad");
 		td.createTeacher("Emil", "Chifu", "0264401449", "1123456789123", "Baritiu 28", "emil.chifu@cs.utcluj.ro",
-				"pw@1");
-
-		CourseDAO cd = new CourseDAO();
+				"echifu");
+		td.createTeacher("Florin", "Oniga", "0264401457", "1987654321987", "Baritiu 26", "forin.oniga@cs.utcluj.ro",
+				"foniga");
+		
 		cd.createCourse("Sofware Design", 1);
 		cd.createCourse("Format Languages and Translators", 2);
+		cd.createCourse("Image Processing", 3);
 
-		EnrolDAO ed = new EnrolDAO();
 		ed.createEnrol(1, 2, 0);
 
 	}
@@ -89,10 +93,18 @@ public class DBDriver {
 							+ "    FOREIGN KEY (`courseId`)" + "    REFERENCES `asgn1`.`courses` (`idcourses`)"
 							+ "    ON DELETE NO ACTION" + "    ON UPDATE NO ACTION);")
 					.executeUpdate(); // student_to_course table
+
+			getConnection()
+					.prepareStatement("ALTER TABLE `asgn1`.`courses` " + "ADD UNIQUE INDEX `name_UNIQUE` (`name` ASC);")
+					.executeUpdate();
 			
-			getConnection().prepareStatement("ALTER TABLE `asgn1`.`courses` "
-					+ "ADD UNIQUE INDEX `name_UNIQUE` (`name` ASC);"
-					).executeUpdate();
+			getConnection().prepareStatement("ALTER TABLE `asgn1`.`students` \r\n" + 
+					"ADD UNIQUE INDEX `email_UNIQUE` (`email` ASC);\r\n" + 
+					");").executeUpdate();
+			
+			getConnection().prepareStatement("ALTER TABLE `asgn1`.`teachers` \r\n" + 
+					"ADD UNIQUE INDEX `email_UNIQUE` (`email` ASC);\r\n" + 
+					");").executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();

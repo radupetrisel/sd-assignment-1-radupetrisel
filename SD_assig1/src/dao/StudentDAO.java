@@ -10,13 +10,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class StudentDAO {
 
 	/*
-	 * firstName, lastName, address, phoneNumber, email, cnp, dob, password - not null
-	 * phoneNumber - match 07[0-9]+ email - contain '@' cnp - start with either 0 or
-	 * 1, only digis
+	 * firstName, lastName, address, phoneNumber, email, cnp, dob, password - not
+	 * null phoneNumber - match 07[0-9]+ email - contain '@' cnp - start with either
+	 * 0 or 1, only digis
 	 */
 	public void createStudent(String firstName, String lastName, String address, String phoneNumber, String email,
 			String cnp, String dob, String password) {
@@ -28,15 +29,23 @@ public class StudentDAO {
 		assert email.matches("[A-Za-z0-9_\\.-]+@.*") : "Invalid email.\n";
 		assert cnp.matches("[12][0-9]{12}") : "Invalid CNP.\n";
 		assert dob != null : "Date of birth null.\n";
-		assert password != null: "Password null.\n";
+		assert password != null : "Password null.\n";
+
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		java.sql.Date dateOfBirth = null;
 
 		try {
-			DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-			java.sql.Date dateOfBirth = new java.sql.Date(df.parse(dob).getTime());
+			dateOfBirth = new java.sql.Date(df.parse(dob).getTime());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 
-			PreparedStatement statement = getConnection().prepareStatement("INSERT INTO asgn1.students "
-					+ "(firstName,lastName,address,phoneNumber,email,cnp,dob, password) " + "VALUES(?, ?, ?, ?, ?, ?, ?, ?);");
+		PreparedStatement statement;
+		try {
 
+			statement = getConnection().prepareStatement(
+					"INSERT INTO asgn1.students " + "(firstName,lastName,address,phoneNumber,email,cnp,dob, password) "
+							+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?);");
 			statement.setString(1, firstName);
 			statement.setString(2, lastName);
 			statement.setString(3, address);
@@ -45,13 +54,11 @@ public class StudentDAO {
 			statement.setString(6, cnp);
 			statement.setDate(7, dateOfBirth);
 			statement.setString(8, password);
-
 			statement.executeUpdate();
 
-		} catch (SQLException | ParseException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	private List<Student> createStudentsFromResultSet(ResultSet rs) throws SQLException {
@@ -78,14 +85,13 @@ public class StudentDAO {
 
 	public List<Student> findStudentByFieldValue(String field, Object value) {
 
+		PreparedStatement statement;
 		try {
 
-			PreparedStatement statement = getConnection()
-					.prepareStatement("SELECT * FROM asgn1.students WHERE " + field + "=?");
+			statement = getConnection().prepareStatement("SELECT * FROM asgn1.students WHERE " + field + "=?");
 			statement.setObject(1, value);
 
 			ResultSet rs = statement.executeQuery();
-
 			return this.createStudentsFromResultSet(rs);
 
 		} catch (SQLException e) {
@@ -93,58 +99,38 @@ public class StudentDAO {
 		}
 
 		return null;
-
 	}
 
-	public void updateStudent(Student s) {
+	public void updateStudentByFieldValue(int studentId, String field, Object value) {
 
+		PreparedStatement statement;
 		try {
 
-			assert s.getFirstName() != null : "First name null.\n";
-			assert s.getLastName() != null : "Last name null.\n";
-			assert s.getAddress() != null : "Address null.\n";
-			assert s.getPhoneNumber().matches("07[0-9]{8}") : "Invalid phone number.\n";
-			assert s.getEmail().matches("[A-Za-z0-9_\\.-]+@.*") : "Invalid email.\n";
-			assert s.getCnp().matches("[12][0-9]{12}") : "Invalid CNP.\n";
-			assert s.getDob() != null : "Date of birth null.\n";
-			assert s.getPassword() != null: "Password null.\n";
-
-			// id, firstName, lastName, cnp, phoneNumber, email, dob, address, password
-			PreparedStatement statement = getConnection().prepareStatement(
-					"UPDATE asgn1.students SET " + "firstName=?, " + "lastName=?, " + "cnp=?, " + "phoneNumber=?, "
-							+ "email=?, " + "dob=?, " + "address=?, " + "password=? " + " WHERE asgn1.students.idstudents=?;");
-
-			statement.setString(1, s.getFirstName());
-			statement.setString(2, s.getLastName());
-			statement.setString(3, s.getCnp());
-			statement.setString(4, s.getPhoneNumber());
-			statement.setString(5, s.getEmail());
-			statement.setDate(6, new java.sql.Date(s.getDob().getTime()));
-			statement.setString(7, s.getAddress());
-			statement.setString(8, s.getPassword());
-			statement.setInt(9, s.getId());
-
+			statement = getConnection()
+					.prepareStatement("UPDATE asgn1.students SET " + field + "=? WHERE asgn1.students.idstudents=?;");
+			statement.setObject(1, value);
+			statement.setInt(2, studentId);
 			statement.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	public void deleteStudentByFieldValue(String field, Object value) {
 
+		PreparedStatement statement;
 		try {
-			PreparedStatement statement = getConnection()
+			
+			statement = getConnection()
 					.prepareStatement("DELETE FROM asgn1.students WHERE " + field + "=?;");
 			statement.setObject(1, value);
-
 			statement.executeUpdate();
-
+			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 
 	}
 
