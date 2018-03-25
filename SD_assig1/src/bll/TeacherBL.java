@@ -10,7 +10,7 @@ import dao.StudentDAO;
 import dao.Teacher;
 import dao.TeacherDAO;
 
-public class TeacherBL {
+public class TeacherBL extends UserBL{
 
 	private Teacher findTeacherByEmail(String email) {
 
@@ -18,7 +18,7 @@ public class TeacherBL {
 
 		try {
 
-			t = (new TeacherDAO()).findTeacherByFieldValue("email", email).get(0);
+			t = (Teacher)(new TeacherDAO()).findUserByFieldValue("email", email).get(0);
 
 		} catch (IndexOutOfBoundsException ie) {
 
@@ -26,7 +26,6 @@ public class TeacherBL {
 		}
 
 		return t;
-
 	}
 
 	public int login(String email, String password) {
@@ -46,35 +45,17 @@ public class TeacherBL {
 		return t.getId();
 
 	}
-
-	public void updateEmail(int teacherID, String newEmail) {
-
-		(new TeacherDAO()).updateTeacherByFieldValue(teacherID, "email", newEmail);
-
-	}
-
-	public void updateAddress(int teacherID, String newAddress) {
-
-		(new TeacherDAO()).updateTeacherByFieldValue(teacherID, "address", newAddress);
-
-	}
-
-	public void updatePassword(int teacherID, String newPassword) {
-
-		(new TeacherDAO()).updateTeacherByFieldValue(teacherID, "password", newPassword);
-
-	}
 	
 	public void createStudent(String firstName, String lastName, String address, String phoneNumber, String email,
-			String cnp, String dob) {
+			String cnp) {
 		
-		(new StudentDAO()).createStudent(firstName, lastName, address, phoneNumber, email, cnp, dob, "1234");
+		(new StudentDAO()).createUser(firstName, lastName, address, phoneNumber, email, cnp, "1234");
 		
 	}
 	
 	public Student viewStudent(int studentID) {
 						
-		return (new StudentDAO()).findStudentByFieldValue("idstudents", studentID).get(0);
+		return (Student)(new StudentDAO()).findUserByFieldValue("idstudents", studentID).get(0);
 	}
 	
 	public void giveMarkToStudent (int courseID, int studentID, int grade) {
@@ -96,7 +77,7 @@ public class TeacherBL {
 	
 	public void removeStudent(int studentID) {
 		
-		(new StudentDAO()).deleteStudentByFieldValue("idstudents", studentID);
+		(new StudentDAO()).deleteUserByFieldValue("idstudents", studentID);
 		
 	}
 	

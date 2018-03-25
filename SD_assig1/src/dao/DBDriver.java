@@ -31,18 +31,15 @@ public class DBDriver {
 		CourseDAO cd = new CourseDAO();
 		EnrolDAO ed = new EnrolDAO();
 
-		sd.createStudent("Radu", "Petrisel", "Azuga 3", "0747673818", "radupetrisel@gmail.com", "1960920125844",
-				"20/09/1996", "asdf");
-		sd.createStudent("Diana", "Danila", "Izlazului 2", "0752030023", "lucia_diana1995@yahoo.com", "2951221125635",
-				"21/12/1995", "ddiana");
-		sd.createStudent("Peter", "Zavaczki", "Intrelacuri 3", "0742737506", "bloopeti@gmail.com", "1970131134856",
-				"31/01/1997", "zpeter");
+		sd.createUser("Radu", "Petrisel", "Azuga 3", "0747673818", "radupetrisel@gmail.com", "1960920125844", "asdf");
+		sd.createUser("Diana", "Danila", "Izlazului 2", "0752030023", "lucia_diana1995@yahoo.com", "2951221125635", "ddiana");
+		sd.createUser("Peter", "Zavaczki", "Intrelacuri 3", "0742737506", "bloopeti@gmail.com", "1970131134856", "zpeter");
 
-		td.createTeacher("Tudor", "Vlad", "0712345678", "1012345678911", "teacher_address_1", "tudor.vlad@cs.utcluj.ro",
+		td.createUser("Tudor", "Vlad", "0712345678", "1012345678911", "teacher_address_1", "tudor.vlad@cs.utcluj.ro",
 				"tvlad");
-		td.createTeacher("Emil", "Chifu", "0264401449", "1123456789123", "Baritiu 28", "emil.chifu@cs.utcluj.ro",
+		td.createUser("Emil", "Chifu", "0264401449", "1123456789123", "Baritiu 28", "emil.chifu@cs.utcluj.ro",
 				"echifu");
-		td.createTeacher("Florin", "Oniga", "0264401457", "1987654321987", "Baritiu 26", "forin.oniga@cs.utcluj.ro",
+		td.createUser("Florin", "Oniga", "0264401457", "1987654321987", "Baritiu 26", "forin.oniga@cs.utcluj.ro",
 				"foniga");
 		
 		cd.createCourse("Sofware Design", 1);
@@ -62,9 +59,9 @@ public class DBDriver {
 					.prepareStatement("CREATE TABLE `asgn1`.`students` (" + "`idstudents` INT NOT NULL AUTO_INCREMENT,"
 							+ " `firstName` VARCHAR(45) NOT NULL," + "  `lastName` VARCHAR(45) NOT NULL,"
 							+ "  `cnp` VARCHAR(13) NOT NULL," + "  `phoneNumber` VARCHAR(10) NOT NULL,"
-							+ "  `email` VARCHAR(45) NOT NULL," + "  `dob` DATE NOT NULL,"
-							+ "  `address` VARCHAR(45) NOT NULL," + "  `password` VARCHAR(45) NOT NULL, "
-							+ "  PRIMARY KEY (`idstudents`)," + "  UNIQUE INDEX `cnp_UNIQUE` (`cnp` ASC));")
+							+ "  `email` VARCHAR(45) NOT NULL," + "  `address` VARCHAR(45) NOT NULL,"
+							+ "  `password` VARCHAR(45) NOT NULL, " + "  PRIMARY KEY (`idstudents`),"
+							+ "  UNIQUE INDEX `cnp_UNIQUE` (`cnp` ASC));")
 					.executeUpdate(); // students table
 
 			getConnection()

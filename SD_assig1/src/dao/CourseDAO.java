@@ -10,6 +10,7 @@ import java.util.List;
 
 public class CourseDAO {
 
+	private final String table = "asgn1.courses";
 	/*
 	 * name - not null teacherId - < max(teacherIds)
 	 */
@@ -44,99 +45,45 @@ public class CourseDAO {
 			Course c = new Course();
 			c.setId(rs.getInt("idcourses"));
 			c.setName(rs.getString("name"));
-			c.setTeacher((new TeacherDAO()).findTeacherByFieldValue("idteachers", rs.getInt("teacherID")).get(0));
+			c.setTeacher((Teacher)(new TeacherDAO()).findUserByFieldValue("idteachers", rs.getInt("teacherID")).get(0));
 			courses.add(c);
 		}
 
 		return courses;
 	}
 	
+	public void updateCourseFieldValue(int courseId, String field, Object value) {
+		
+		(new GeneralDAO()).updateFieldValue(table, courseId, field, value);
+		
+	}
+	
+	public List<Course> findCourseByFieldValue(String field, Object value){
+		
+		try {
+			return this.createCoursesFromResultSet((new GeneralDAO()).findByFieldValue(table, field, value));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
 	public List<Course> findCourseByFieldValue(List<String> fields, List<Object> values){
 		
-		PreparedStatement statement;
 		try {
-
-			String statement_string = "SELECT * FROM asgn1.courses WHERE ";
-
-			int i = 0;
-			for (i = 0; i < fields.size() - 1; i++) {
-
-				statement_string += fields.get(0) + "=? and ";
-
-			}
-
-			statement_string += fields.get(i) + "=?";
-
-			statement = getConnection().prepareStatement(statement_string);
-
-			i = 1;
-
-			for (Object o : values) {
-
-				statement.setObject(i++, o);
-			}
-
-			ResultSet rs = statement.executeQuery();
-
-			return this.createCoursesFromResultSet(rs);
-
+			return this.createCoursesFromResultSet((new GeneralDAO()).findByFieldValue(table, fields, values));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
+		
 		return null;
 	}
-
-	public List<Course> findCourseByFieldValue(String field, Object value) {
-
-		PreparedStatement statement;
-		try {
-			statement = getConnection().prepareStatement("SELECT * FROM asgn1.courses WHERE " + field + "=?");
-			statement.setObject(1, value);
-			ResultSet rs = statement.executeQuery();
-
-			return this.createCoursesFromResultSet(rs);
-
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-		}
-
-		return null;
-	}
-
+	
 	public void deleteCourseByFieldValue(String field, Object value) {
-
-		PreparedStatement statement;
-
-		try {
-			
-			statement = getConnection().prepareStatement("DELETE FROM asgn1.courses WHERE " + field + "=?;");
-			statement.setObject(1, value);
-			statement.executeUpdate();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	public void updateCourseByFieldValue(int courseId, String field, Object value) {
-
-		PreparedStatement statement;
-		try {
-			
-			statement = getConnection()
-					.prepareStatement("UPDATE asgn1.courses SET " + field + "=? WHERE asgn1.courses.idcourses=?;");
-			statement.setObject(1, value);
-			statement.setInt(2, courseId);
-			statement.executeUpdate();
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		
+		(new GeneralDAO()).deleteByFieldValue(table, field, value);
+		
 	}
 
 }

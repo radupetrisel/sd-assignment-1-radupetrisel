@@ -8,8 +8,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EnrolDAO {
+public class EnrolDAO{
 
+	private final String table = "asgn1.enrols";
+	
 	private List<Enrol> createEnrolsFromResultSet(ResultSet rs) throws SQLException {
 
 		List<Enrol> enrols = new ArrayList<Enrol>();
@@ -19,7 +21,7 @@ public class EnrolDAO {
 			Enrol e = new Enrol();
 			e.setId(rs.getInt("idenrols"));
 			e.setCourse((new CourseDAO()).findCourseByFieldValue("idcourses", rs.getInt("courseId")).get(0));
-			e.setStudent((new StudentDAO()).findStudentByFieldValue("idstudents", rs.getInt("studentId")).get(0));
+			e.setStudent((Student)(new StudentDAO()).findUserByFieldValue("idstudents", rs.getInt("studentId")).get(0));
 			e.setGrade(rs.getInt("grade"));
 			enrols.add(e);
 		}
@@ -50,84 +52,39 @@ public class EnrolDAO {
 	public List<Enrol> findEnrolByFieldValue(String field, Object value){
 		
 		try {
-			
-			PreparedStatement statement = getConnection().prepareStatement("SELECT * FROM asgn1.enrols WHERE " + field + "=?");
-			statement.setObject(1, value);
-			ResultSet rs = statement.executeQuery();
-			
-			return this.createEnrolsFromResultSet(rs);
-			
+			return this.createEnrolsFromResultSet((new GeneralDAO()).findByFieldValue(table, field, value));
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		return null;
+		
 	}
 	
 
 	public List<Enrol> findEnrolByFieldValue(List<String> fields, List<Object> values) {
 
-		PreparedStatement statement;
 		try {
-
-			String statement_string = "SELECT * FROM asgn1.enrols WHERE ";
-
-			int i = 0;
-			for (i = 0; i < fields.size() - 1; i++) {
-
-				statement_string += fields.get(0) + "=? and ";
-
-			}
-
-			statement_string += fields.get(i) + "=?";
-
-			statement = getConnection().prepareStatement(statement_string);
-
-			i = 1;
-
-			for (Object o : values) {
-
-				statement.setObject(i++, o);
-			}
-
-			return this.createEnrolsFromResultSet(statement.executeQuery());
-
+			return this.createEnrolsFromResultSet((new GeneralDAO()).findByFieldValue(table, fields, values));
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
 		return null;
 	}
 
 	public void updateEnrol(int enrolId, String field, Object value) {
-
-		PreparedStatement statement;
-		try {
-
-			statement = getConnection()
-					.prepareStatement("UPDATE asgn1.enrols SET " + field + "=? WHERE asgn1.enrols.idenrols=?;");
-			statement.setObject(1, value);
-			statement.setInt(2, enrolId);
-			statement.executeUpdate();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
+		
+		(new GeneralDAO()).updateFieldValue(table, enrolId, field, value);
+		
 	}
 
 	public void deleteEnrolsByFieldValue(String field, Object value) {
+		
+		(new GeneralDAO()).deleteByFieldValue(table, field, value);
 
-		PreparedStatement statement;
-		try {
-
-			statement = getConnection().prepareStatement("DELETE FROM asgn1.enrols WHERE " + field + "=?;");
-			statement.setObject(1, value);
-			statement.executeUpdate();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 
 	}
 
