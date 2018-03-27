@@ -31,17 +31,19 @@ public class DBDriver {
 		CourseDAO cd = new CourseDAO();
 		EnrolDAO ed = new EnrolDAO();
 
-		sd.createUser("Radu", "Petrisel", "Azuga 3", "0747673818", "radupetrisel@gmail.com", "1960920125844", "asdf");
-		sd.createUser("Diana", "Danila", "Izlazului 2", "0752030023", "lucia_diana1995@yahoo.com", "2951221125635", "ddiana");
-		sd.createUser("Peter", "Zavaczki", "Intrelacuri 3", "0742737506", "bloopeti@gmail.com", "1970131134856", "zpeter");
+		sd.createUser("Radu", "Petrisel", "1960920125844", "0747673818", "radupetrisel@gmail.com", "Azuga 3", "asdf");
+		sd.createUser("Diana", "Danila", "2951221125635", "0752030023", "lucia_diana1995@yahoo.com", "Izlazului 2",
+				"ddiana");
+		sd.createUser("Peter", "Zavaczki", "1970131134856", "0742737506", "bloopeti@gmail.com", "Intrelacuri 3",
+				"zpeter");
 
-		td.createUser("Tudor", "Vlad", "0712345678", "1012345678911", "teacher_address_1", "tudor.vlad@cs.utcluj.ro",
+		td.createUser("Tudor", "Vlad", "1012345678911", "0712345678", "tudor.vlad@cs.utcluj.ro", "teacher_address_1",
 				"tvlad");
-		td.createUser("Emil", "Chifu", "0264401449", "1123456789123", "Baritiu 28", "emil.chifu@cs.utcluj.ro",
+		td.createUser("Emil", "Chifu", "1123456789123", "0264401449", "emil.chifu@cs.utcluj.ro", "Baritiu 28",
 				"echifu");
-		td.createUser("Florin", "Oniga", "0264401457", "1987654321987", "Baritiu 26", "forin.oniga@cs.utcluj.ro",
+		td.createUser("Florin", "Oniga", "1987654321987", "0264401457", "forin.oniga@cs.utcluj.ro", "Baritiu 26",
 				"foniga");
-		
+
 		cd.createCourse("Sofware Design", 1);
 		cd.createCourse("Format Languages and Translators", 2);
 		cd.createCourse("Image Processing", 3);
@@ -55,21 +57,20 @@ public class DBDriver {
 		try {
 
 			getConnection().prepareStatement("CREATE DATABASE asgn1").executeUpdate();
-			getConnection()
-					.prepareStatement("CREATE TABLE `asgn1`.`students` (" + "`idstudents` INT NOT NULL AUTO_INCREMENT,"
-							+ " `firstName` VARCHAR(45) NOT NULL," + "  `lastName` VARCHAR(45) NOT NULL,"
-							+ "  `cnp` VARCHAR(13) NOT NULL," + "  `phoneNumber` VARCHAR(10) NOT NULL,"
-							+ "  `email` VARCHAR(45) NOT NULL," + "  `address` VARCHAR(45) NOT NULL,"
-							+ "  `password` VARCHAR(45) NOT NULL, " + "  PRIMARY KEY (`idstudents`),"
-							+ "  UNIQUE INDEX `cnp_UNIQUE` (`cnp` ASC));")
-					.executeUpdate(); // students table
+			getConnection().prepareStatement("CREATE TABLE `asgn1`.`students` ("
+					+ "`idstudents` INT NOT NULL AUTO_INCREMENT," + " `firstName` VARCHAR(45) NOT NULL,"
+					+ "  `lastName` VARCHAR(45) NOT NULL," + "  `cnp` VARCHAR(13) NOT NULL,"
+					+ "  `phoneNumber` VARCHAR(10) NOT NULL," + "  `email` VARCHAR(45) NOT NULL,"
+					+ "  `address` VARCHAR(45) NOT NULL," + "  `password` VARCHAR(45) NOT NULL, "
+					+ "  PRIMARY KEY (`idstudents`)," + "  UNIQUE INDEX `cnp_UNIQUE` (`cnp` ASC));").executeUpdate(); // students
+																														// table
 
 			getConnection()
 					.prepareStatement("CREATE TABLE `asgn1`.`teachers` ( "
-							+ " `idteachers` INT NOT NULL AUTO_INCREMENT," + "  `firstName` VARCHAR(45) NOT NULL,"
-							+ "  `lastName` VARCHAR(45) NOT NULL," + "  `phoneNumber` VARCHAR(10) NOT NULL,"
-							+ "  `cnp` VARCHAR(13) NOT NULL," + "  `address` VARCHAR(45) NOT NULL,"
-							+ "  `email` VARCHAR(45) NOT NULL," + "  `password` VARCHAR(45) NOT NULL,"
+							+ " `idteachers` INT NOT NULL AUTO_INCREMENT," + " `firstName` VARCHAR(45) NOT NULL,"
+							+ "  `lastName` VARCHAR(45) NOT NULL," + "  `cnp` VARCHAR(13) NOT NULL,"
+							+ "  `phoneNumber` VARCHAR(10) NOT NULL," + "  `email` VARCHAR(45) NOT NULL,"
+							+ "  `address` VARCHAR(45) NOT NULL," + "  `password` VARCHAR(45) NOT NULL, "
 							+ "  PRIMARY KEY (`idteachers`)," + "  UNIQUE INDEX `cnp_UNIQUE` (`cnp` ASC));")
 					.executeUpdate(); // teachers table
 
@@ -94,14 +95,16 @@ public class DBDriver {
 			getConnection()
 					.prepareStatement("ALTER TABLE `asgn1`.`courses` " + "ADD UNIQUE INDEX `name_UNIQUE` (`name` ASC);")
 					.executeUpdate();
-			
-			getConnection().prepareStatement("ALTER TABLE `asgn1`.`students`" + 
-					"ADD UNIQUE INDEX `email_UNIQUE` (`email` ASC);"
-					).executeUpdate();
-			
-			getConnection().prepareStatement("ALTER TABLE `asgn1`.`teachers`" + 
-					"ADD UNIQUE INDEX `email_UNIQUE` (`email` ASC);"
-					).executeUpdate();
+
+			getConnection()
+					.prepareStatement(
+							"ALTER TABLE `asgn1`.`students`" + "ADD UNIQUE INDEX `email_UNIQUE` (`email` ASC);")
+					.executeUpdate();
+
+			getConnection()
+					.prepareStatement(
+							"ALTER TABLE `asgn1`.`teachers`" + "ADD UNIQUE INDEX `email_UNIQUE` (`email` ASC);")
+					.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();

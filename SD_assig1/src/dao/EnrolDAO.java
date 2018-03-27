@@ -10,7 +10,7 @@ import java.util.List;
 
 public class EnrolDAO{
 
-	private final String table = "asgn1.enrols";
+	private final String table = "enrols";
 	
 	private List<Enrol> createEnrolsFromResultSet(ResultSet rs) throws SQLException {
 

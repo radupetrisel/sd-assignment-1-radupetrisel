@@ -12,12 +12,12 @@ public abstract class UserDAO {
 	protected String table;
 
 	/*
-	 * firstName, lastName, address, phoneNumber, email, cnp, dob, password - not
-	 * null phoneNumber - match 0[0-9]+ email - contain '@' cnp - start with either
-	 * 0, 1 or 2, only digis
+	 * firstName, lastName, address, phoneNumber, email, cnp, dob, password -
+	 * not null phoneNumber - match 0[0-9]+ email - contain '@' cnp - start with
+	 * either 0, 1 or 2, only digis
 	 */
-	public void createUser(String firstName, String lastName, String phoneNumber, String cnp, String address,
-			String email, String password) {
+	public void createUser(String firstName, String lastName, String cnp, String phoneNumber, String email,
+			String address, String password) {
 
 		assert firstName != null : "First name null.\n";
 		assert lastName != null : "Last name null.\n";
@@ -30,14 +30,15 @@ public abstract class UserDAO {
 		PreparedStatement statement;
 		try {
 
-			statement = getConnection().prepareStatement("INSERT INTO asgn1." + table
-					+ "(firstName,lastName,address,phoneNumber,email,cnp, password) " + "VALUES(?, ?, ?, ?, ?, ?, ?);");
+			statement = getConnection().prepareStatement(
+					"INSERT INTO asgn1." + table + "(firstName, lastName, cnp, phoneNumber, email, address, password) "
+							+ "VALUES(?, ?, ?, ?, ?, ?, ?);");
 			statement.setString(1, firstName);
 			statement.setString(2, lastName);
-			statement.setString(3, address);
+			statement.setString(3, cnp);
 			statement.setString(4, phoneNumber);
 			statement.setString(5, email);
-			statement.setString(6, cnp);
+			statement.setString(6, address);
 			statement.setString(7, password);
 			statement.executeUpdate();
 
@@ -48,18 +49,17 @@ public abstract class UserDAO {
 	}
 
 	protected abstract List<? extends User> createUserFromResultSet(ResultSet rs) throws SQLException;
-	
 
 	public void updateUserFieldValue(int courseId, String field, Object value) {
 
-		(new GeneralDAO()).updateFieldValue("asgn1." + table, courseId, field, value);
+		(new GeneralDAO()).updateFieldValue(table, courseId, field, value);
 
 	}
 
 	public List<? extends User> findUserByFieldValue(String field, Object value) {
 
 		try {
-			return this.createUserFromResultSet((new GeneralDAO()).findByFieldValue("asgn1." + table, field, value));
+			return this.createUserFromResultSet((new GeneralDAO()).findByFieldValue(table, field, value));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -70,7 +70,7 @@ public abstract class UserDAO {
 	public List<? extends User> findUserByFieldValue(List<String> fields, List<Object> values) {
 
 		try {
-			return this.createUserFromResultSet((new GeneralDAO()).findByFieldValue("asgn1." + table, fields, values));
+			return this.createUserFromResultSet((new GeneralDAO()).findByFieldValue(table, fields, values));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -80,7 +80,7 @@ public abstract class UserDAO {
 
 	public void deleteUserByFieldValue(String field, Object value) {
 
-		(new GeneralDAO()).deleteByFieldValue("asgn1." + table, field, value);
+		(new GeneralDAO()).deleteByFieldValue(table, field, value);
 
 	}
 

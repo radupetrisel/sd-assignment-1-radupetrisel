@@ -1,8 +1,12 @@
 package bll;
 
 import dao.StudentDAO;
+import dao.User;
 
 public abstract class UserBL {
+	
+	
+	public abstract User findById(int id);
 	
 	public void updateEmail(int userId, String newEmail) {
 

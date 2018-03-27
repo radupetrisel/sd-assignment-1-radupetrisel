@@ -1,16 +1,23 @@
 package pl;
 
+import java.io.File;
+
 import bll.StudentBL;
 import bll.TeacherBL;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Login {
@@ -21,10 +28,13 @@ public class Login {
 	private PasswordField password;
 	private CheckBox isTeacher;
 	private Button login;
+	private Label err;
 	
 	public Login(Stage window, double width, double height) {
 		
 		this.window = window;
+		this.window.setTitle("Login");
+		
 		VBox box = new VBox();
 		box.setAlignment(Pos.CENTER);
 		box.setSpacing(10);
@@ -53,6 +63,21 @@ public class Login {
 			
 		});
 		
+		login.setOnMouseEntered(e -> {
+			
+			Media media = new Media(new File("login.mp3").toURI().toString());
+			MediaPlayer mp = new MediaPlayer(media);
+			mp.play();			
+		
+		});	
+		
+		err = new Label("Invalid username/password");
+		err.setTextFill(Color.RED);
+		err.setBackground(Background.EMPTY);
+		err.setVisible(false);
+		
+		box.getChildren().add(err);
+		
 		this.window.setScene(loginScene);
 	}
 	
@@ -66,10 +91,7 @@ public class Login {
 			
 			if (id > 0) {
 				
-				BorderPane p = new BorderPane();
-				Scene teacherScene = new Scene(p, 500, 500);
-				this.window.setTitle("Teacher");
-				this.window.setScene(teacherScene);
+				new TeacherWindow(this.window, id);
 			}
 			
 		}
@@ -79,11 +101,15 @@ public class Login {
 			
 			if (id > 0) {
 				
-				BorderPane p = new BorderPane();
-				Scene studentScene = new Scene(p, 200, 200);
-				this.window.setTitle("Student");
-				this.window.setScene(studentScene);
+				new StudentWindow(this.window, id);
+				
 			}
+			
+		}
+		
+		if (id < 0) {
+			
+			this.err.setVisible(true);
 			
 		}
 		

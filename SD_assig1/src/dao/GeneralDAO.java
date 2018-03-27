@@ -13,7 +13,7 @@ public class GeneralDAO {
 
 		try {
 
-			String statement_string = "SELECT * FROM " + table + " WHERE ";
+			String statement_string = "SELECT * FROM asgn1." + table + " WHERE ";
 
 			int i = 0;
 			for (i = 0; i < fields.size() - 1; i++) {
@@ -47,7 +47,7 @@ public class GeneralDAO {
 		try {
 
 			PreparedStatement statement = getConnection()
-					.prepareStatement("SELECT * FROM " + table + " WHERE " + field + "=?");
+					.prepareStatement("SELECT * FROM asgn1." + table + " WHERE " + field + "=?");
 			statement.setObject(1, value);
 
 			return statement.executeQuery();
@@ -66,7 +66,7 @@ public class GeneralDAO {
 
 		try {
 
-			statement = getConnection().prepareStatement("DELETE FROM " + " WHERE " + field + "=?;");
+			statement = getConnection().prepareStatement("DELETE FROM asgn1." + table + " WHERE " + field + "=?;");
 			statement.setObject(1, value);
 			statement.executeUpdate();
 
@@ -82,7 +82,7 @@ public class GeneralDAO {
 		try {
 
 			statement = getConnection()
-					.prepareStatement("UPDATE " + table + " SET " + field + "=? WHERE asgn1.courses.idcourses=?;");
+					.prepareStatement("UPDATE asgn1." + table + " SET " + field + "=? WHERE asgn1." + table + "." + "id" + table + "=?;");
 			statement.setObject(1, value);
 			statement.setInt(2, id);
 			statement.executeUpdate();

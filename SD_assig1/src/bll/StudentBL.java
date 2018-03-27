@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import dao.EnrolDAO;
 import dao.Student;
 import dao.StudentDAO;
+import dao.User;
 
 public class StudentBL extends UserBL{
 
@@ -49,6 +50,12 @@ public class StudentBL extends UserBL{
 		return (new EnrolDAO()).findEnrolByFieldValue("studentId", studentID).stream()
 				.collect(Collectors.toMap(e -> e.getCourse().getName(), e -> e.getGrade()));
 
+	}
+
+	@Override
+	public User findById(int id) {
+		
+		return (new StudentDAO()).findUserByFieldValue("idstudents", id).get(0);
 	}
 
 }

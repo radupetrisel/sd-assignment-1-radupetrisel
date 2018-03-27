@@ -10,7 +10,7 @@ import java.util.List;
 
 public class CourseDAO {
 
-	private final String table = "asgn1.courses";
+	private final String table = "courses";
 	/*
 	 * name - not null teacherId - < max(teacherIds)
 	 */

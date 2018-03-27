@@ -9,6 +9,7 @@ import dao.Student;
 import dao.StudentDAO;
 import dao.Teacher;
 import dao.TeacherDAO;
+import dao.User;
 
 public class TeacherBL extends UserBL{
 
@@ -49,7 +50,7 @@ public class TeacherBL extends UserBL{
 	public void createStudent(String firstName, String lastName, String address, String phoneNumber, String email,
 			String cnp) {
 		
-		(new StudentDAO()).createUser(firstName, lastName, address, phoneNumber, email, cnp, "1234");
+		(new StudentDAO()).createUser(firstName, lastName, cnp, phoneNumber, email, address, "1234");
 		
 	}
 	
@@ -79,6 +80,11 @@ public class TeacherBL extends UserBL{
 		
 		(new StudentDAO()).deleteUserByFieldValue("idstudents", studentID);
 		
+	}
+
+	public User findById(int id) {
+		
+		return (new TeacherDAO()).findUserByFieldValue("idteachers", id).get(0);
 	}
 	
 
