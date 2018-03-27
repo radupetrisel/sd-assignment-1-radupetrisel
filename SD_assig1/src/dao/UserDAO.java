@@ -50,9 +50,9 @@ public abstract class UserDAO {
 
 	protected abstract List<? extends User> createUserFromResultSet(ResultSet rs) throws SQLException;
 
-	public void updateUserFieldValue(int courseId, String field, Object value) {
+	public void updateUserFieldValue(int id, String field, Object value) {
 
-		(new GeneralDAO()).updateFieldValue(table, courseId, field, value);
+		(new GeneralDAO()).updateFieldValue(table, id, field, value);
 
 	}
 

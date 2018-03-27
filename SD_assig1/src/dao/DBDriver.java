@@ -44,8 +44,8 @@ public class DBDriver {
 		td.createUser("Florin", "Oniga", "1987654321987", "0264401457", "forin.oniga@cs.utcluj.ro", "Baritiu 26",
 				"foniga");
 
-		cd.createCourse("Sofware Design", 1);
-		cd.createCourse("Format Languages and Translators", 2);
+		cd.createCourse("Software Design", 1);
+		cd.createCourse("Formal Languages and Translators", 2);
 		cd.createCourse("Image Processing", 3);
 
 		ed.createEnrol(1, 2, 0);
@@ -104,6 +104,14 @@ public class DBDriver {
 			getConnection()
 					.prepareStatement(
 							"ALTER TABLE `asgn1`.`teachers`" + "ADD UNIQUE INDEX `email_UNIQUE` (`email` ASC);")
+					.executeUpdate();
+
+			getConnection().prepareStatement("ALTER TABLE `asgn1`.`students`"
+					+ " ADD COLUMN `isDeleted` TINYINT NOT NULL DEFAULT 0 AFTER `password`;").executeUpdate();
+
+			getConnection()
+					.prepareStatement("ALTER TABLE `asgn1`.`teachers` "
+							+ "ADD COLUMN `isDeleted` TINYINT NOT NULL DEFAULT 0 AFTER `password`;")
 					.executeUpdate();
 
 		} catch (SQLException e) {

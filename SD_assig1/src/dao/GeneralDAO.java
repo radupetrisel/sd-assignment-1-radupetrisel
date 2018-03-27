@@ -29,7 +29,7 @@ public class GeneralDAO {
 			i = 1;
 
 			for (Object o : values) {
-
+				
 				statement.setObject(i++, o);
 			}
 

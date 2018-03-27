@@ -10,6 +10,11 @@ public abstract class User {
 	private String email;
 	private String cnp;
 	private String password;
+	private boolean isDeleted;
+	
+	public User() {
+		isDeleted = false;
+	}
 	
 	public int getId() {
 		return id;
@@ -78,6 +83,14 @@ public abstract class User {
 	public String toString() {
 		return "[id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", address=" + address
 				+ ", phoneNumber=" + phoneNumber + ", email=" + email + ", cnp=" + cnp + ", password=" + password + "]";
+	}
+
+	public boolean isDeleted() {
+		return isDeleted;
+	}
+
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
 	}	
 	
 }

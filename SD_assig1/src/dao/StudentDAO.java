@@ -28,6 +28,7 @@ public class StudentDAO extends UserDAO {
 			s.setEmail(rs.getString("email"));
 			s.setAddress(rs.getString("address"));
 			s.setPassword(rs.getString("password"));
+			s.setDeleted(rs.getBoolean("isDeleted"));
 			students.add(s);
 		}
 
