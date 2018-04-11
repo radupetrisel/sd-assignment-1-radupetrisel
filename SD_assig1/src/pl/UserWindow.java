@@ -100,7 +100,7 @@ public abstract class UserWindow {
 	}
 
 	private void updateAddress() {
-		
+
 		HBox box = new HBox();
 		box.setAlignment(Pos.CENTER);
 		box.setSpacing(10);

@@ -54,7 +54,7 @@ public class TeacherWindow extends UserWindow {
 
 		VBox labelColumn = new VBox();
 		labelColumn.setAlignment(Pos.CENTER_RIGHT);
-		labelColumn.setSpacing(10);
+		labelColumn.setSpacing(20);
 
 		VBox inputColumn = new VBox();
 		inputColumn.setAlignment(Pos.CENTER_LEFT);

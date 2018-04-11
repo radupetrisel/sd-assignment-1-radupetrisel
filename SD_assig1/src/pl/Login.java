@@ -63,14 +63,6 @@ public class Login {
 			
 		});
 		
-		login.setOnMouseEntered(e -> {
-			
-			Media media = new Media(new File("login.mp3").toURI().toString());
-			MediaPlayer mp = new MediaPlayer(media);
-			mp.play();			
-		
-		});	
-		
 		err = new Label("Invalid username/password");
 		err.setTextFill(Color.RED);
 		err.setBackground(Background.EMPTY);
